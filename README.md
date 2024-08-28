@@ -6,3 +6,5 @@ Simple and Classic games made in c3 lang!
 ## Snake
 
 ## Asteroids
+
+## Tetris
