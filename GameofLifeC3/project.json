@@ -3,13 +3,14 @@
   "warnings": [ "no-unused" ],
 
   "dependency-search-paths": [ "lib" ],
-  "dependencies": [ "raylib" ],
+  "dependencies": [ "raylib", "sdl3" ],
 
   "authors": [ "Salcwm <https://github.com/Salc-wm>" ],
   "version": "1.0.0",
 
   "sources": [ "src/**" ],
   "output": "build",
+
   "targets": {
     "GameofLifeC3": {
       "type": "executable",
@@ -17,6 +18,5 @@
   },
 
   "cpu": "generic",
-  // Optimization: "O0", "O1", "O2", "O3", "O4", "O5", "Os", "Oz".
   "opt": "O2"
 }
