@@ -23,11 +23,11 @@ const ichar[<2>][8] NEIGHBORS_OFFSETS @local =
 };
 
 
-fn int Simulation.getValue(Simulation* self, Table grid) =>
+fn int Simulation.getValue(Simulation* self, Table grid) @inline =>
     self.isWithinBounds(grid) ?
         self.grid.getValue(grid):0;
 
-fn bool Simulation.isWithinBounds(Simulation* self, Table grid) @local =>
+fn bool Simulation.isWithinBounds(Simulation* self, Table grid) @local @inline =>
     grid.x >= 0 && grid.x < self.grid.rows && grid.y >= 0 && grid.y < self.grid.columns ? true : false;
 
 fn int Simulation.countLiveNeighbors(Simulation* self, Table grid) @local {
@@ -46,8 +46,8 @@ fn int Simulation.countLiveNeighbors(Simulation* self, Table grid) @local {
 macro void Simulation.draw(Simulation* self) => self.grid.draw();
 macro void Simulation.clearGrid(Simulation* self) => self.grid.clear();
 
-fn void Simulation.toggleCell(Simulation* self, Table grid) @local {
-    if (!self.@isRunning() && self.isWithinBounds(grid)) self.grid.toggleCell(grid);
+fn void Simulation.toggleCell(Simulation* self, Table grid, char v) @local {
+    if (!self.@isRunning() && self.isWithinBounds(grid)) self.grid.toggleCell(grid, v);
 }
 
 fn void Simulation.hoverCell(Simulation* self, Table grid) @local {
@@ -56,22 +56,22 @@ fn void Simulation.hoverCell(Simulation* self, Table grid) @local {
     if (self.getValue(grid) != 1) self.grid.hoverCell(grid);
 }
 
-fn void Simulation.actionCell(Simulation* self, Table mouse, bool action) {
+fn void Simulation.actionCell(Simulation* self, Table mouse, bool action, char v) {
     if (action) {
-        self.toggleCell(mouse);
+        self.toggleCell(mouse, v);
         return;
     }
 
     self.hoverCell(mouse);
 }
 
-fn int Simulation.getLivingCells(Simulation* self) => self.cells_live;
+macro int Simulation.getLivingCells(Simulation* self) => self.cells_live;
 
-fn void Simulation.start(Simulation* self) => self.run = true;
-fn void Simulation.stop(Simulation* self) => self.run = false;
+macro void Simulation.stop(Simulation* self) => self.run = false;
+macro void Simulation.start(Simulation* self) => self.run = true;
 
 macro bool Simulation.@isRunning(Simulation* &self) => self.run;
-fn void Simulation.createRandomState(Simulation* self) => self.grid.fillRandom();
+macro void Simulation.createRandomState(Simulation* self) => self.grid.fillRandom();
 
 fn void Simulation.update(Simulation* self) {
     if (!self.@isRunning()) return;

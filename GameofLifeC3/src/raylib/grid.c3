@@ -27,7 +27,7 @@ macro int Grid.getValue(Grid* self, Table grid) => self.cells[grid.x][grid.y];
 macro int Grid.getRows(Grid* self) => self.rows;
 macro int Grid.getColumns(Grid* self) => self.columns;
 
-fn void Grid.setLivingCells(Grid* self) => self.l_cells++;
+macro void Grid.setLivingCells(Grid* self) => self.l_cells++;
 
 fn void Grid.fillRandom(Grid* self) {
     foreach (&row: self.cells) foreach (&column: row) {
@@ -36,15 +36,15 @@ fn void Grid.fillRandom(Grid* self) {
     }
 }
 
-fn Grid grid(uint width, uint height) @public => {
+fn Grid grid(uint width, uint height) @public @inline => {
     (height - 80) / cst::GRD_CELL_SIZE,
     width / cst::GRD_CELL_SIZE, D_GRID, 0
 };
 
-fn void Grid.clear(Grid *self) => self.cells = D_GRID;
+macro void Grid.clear(Grid *self) => self.cells = D_GRID;
 
-fn void Grid.toggleCell(Grid* self, Table grid, char v = 1) => self.setValue(grid, v);
-fn void Grid.hoverCell(Grid* self, Table grid) => self.setValue(grid, 2);
+fn void Grid.toggleCell(Grid* self, Table grid, char v = 1) @inline => self.setValue(grid, v);
+fn void Grid.hoverCell(Grid* self, Table grid) @inline => self.setValue(grid, 2);
 
 char center_cell_size @local = cst::GRD_CELL_SIZE - 2;
 char align_column @local = cst::PDG_TOP - 3;

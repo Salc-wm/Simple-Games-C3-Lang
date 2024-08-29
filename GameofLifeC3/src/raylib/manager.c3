@@ -44,7 +44,7 @@ const Text_opt[2] UI_TEXTS_STATE = {
     {"Off", 110, 55, 24, raylib::GRAY}
 };
 
-fn Table get_grid_mouse_pos() {
+fn Table get_grid_mouse_pos() @inline {
     Vector2 mouse_position = raylib::get_mouse_position();
 
     return @get_grid_rc(
@@ -56,16 +56,19 @@ fn Table get_grid_mouse_pos() {
 fn void keyboard_actions(Simulation* game, bool *api) {
     if (key_pressed(keyboard::ENTER) || key_pressed(keyboard::SPACE)) {|
         if (!game.run) {
+            raylib::set_target_fps(12);
             game.start();
 
             return;
         }
 
+        raylib::set_target_fps(120);
         game.stop();
     |};
 
     Table grid_hover_mouse = get_grid_mouse_pos();
-    game.actionCell(grid_hover_mouse, raylib::is_mouse_button_down(MouseButton.BUTTON_LEFT)? true:false);
+    game.actionCell(grid_hover_mouse, raylib::is_mouse_button_down(MouseButton.BUTTON_LEFT)? true:false, 1);
+    game.actionCell(grid_hover_mouse, raylib::is_mouse_button_down(MouseButton.BUTTON_RIGHT), 0);
 
     if (key_pressed(keyboard::F)) {
         game.createRandomState();
@@ -107,7 +110,7 @@ fn void init(String title, bool *api) @public
     raylib::init_window(cst::WTH, cst::HHT, title);
     defer raylib::close_window();
 
-    raylib::set_target_fps(12);
+    raylib::set_target_fps(120);
 
 
     Image logo = raylib::load_image("resources/img/c3golf.png");

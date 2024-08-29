@@ -1,4 +1,4 @@
-module gofl_sdl3::system_sdl;
+module gofl_sdl3::system_sdl @local;
 
 import sdl3;
 
@@ -11,7 +11,7 @@ import cst;
 
 const FRect BORDER = {5, cst::PDG_TOP-4, cst::WTH - cst::PDG_LR, cst::HHT - cst::PDG_TOP};
 
-fn void init(ZString title, bool *api)
+fn void init(ZString title, bool *api) @public
 {
     if (sdl3::init(subsystem::VIDEO | subsystem::EVENTS) < 0) sdl3::log_error("sdl3 init failed: %s", sdl3::get_error());
     defer sdl3::quit();
