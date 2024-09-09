@@ -16,11 +16,10 @@ struct Text_opt {
     short r, g, b;
 }
 
-const Text_opt[3] GUI_TEXTS_AC = {
+const Text_opt[2] GUI_TEXTS_AC = {
     {"Living cells:", 20, cst::PDG_TOP-35, 19},
 
     {"Graphic API:", 10, cst::PDG_TOP-70, 17},
-    {"Raylib -> OpenGL", 112, cst::PDG_TOP-70, 16}
 };
 
 const Text_opt[3] GUI_TEXTS_TITLE = {

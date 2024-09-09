@@ -19,7 +19,7 @@ macro void center_draw_text(Text_opt args, Color color, bool align = true) =>
 
 const Color COLOR_TEXT = raylib::LIGHTGRAY;
 
-const Color[3] CL_TEXTS_AC = { COLOR_TEXT, COLOR_TEXT, raylib::ORANGE };
+const Color[2] CL_TEXTS_AC = { COLOR_TEXT, COLOR_TEXT };
 const Color[3] CL_TEXTS_TITLE = { COLOR_TEXT, raylib::GREEN, COLOR_TEXT };
 const Color[2] CL_TEXTS_STATE = { raylib::GREEN, raylib::GRAY };
 
@@ -32,7 +32,7 @@ fn Table get_grid_mouse_pos() @inline {
     );
 }
 
-fn void keyboard_actions(Simulation* game, bool *api) {
+fn void keyboard_actions(Simulation* game, char *api) {
     if (key_pressed(keyboard::ENTER) || key_pressed(keyboard::SPACE)) {|
         if (!game.run) {
             raylib::set_target_fps(12);
@@ -53,11 +53,11 @@ fn void keyboard_actions(Simulation* game, bool *api) {
         game.createRandomState();
     } else if (raylib::is_key_pressed(keyboard::G)) game.clearGrid();
 
-    if (key_pressed(keyboard::TAB)) *api = false;
+    if (key_pressed(keyboard::TAB)) *api = 2;
 }
 
-fn void gofl_update(Simulation game, bool *api) {
-    while (!raylib::window_should_close() && *api)
+fn void gofl_update(Simulation game, char *api) {
+    while (!raylib::window_should_close() && *api == 1)
     {
         game.update();
 
@@ -79,6 +79,8 @@ fn void game_ui(Simulation* game) {
     foreach (idx, ui: cst::GUI_TEXTS_TITLE) center_draw_text(ui, CL_TEXTS_TITLE[idx]);
     foreach (idx, ui: cst::GUI_TEXTS_AC) center_draw_text(ui, CL_TEXTS_AC[idx], false);
 
+    center_draw_text({"Raylib -> OpenGL", 112, cst::PDG_TOP-70, 16}, raylib::ORANGE, false);
+
     if (game.@isRunning()) {
         center_draw_text(cst::GUI_TEXTS_STATE[0], CL_TEXTS_STATE[0]);
     } else {
@@ -88,7 +90,7 @@ fn void game_ui(Simulation* game) {
     raylib::draw_text(string::new_format("%d", game.getLivingCells()), 120, cst::PDG_TOP-35, 20, raylib::GREEN);
 }
 
-fn void init(String title, bool *api) @public
+fn void init(String title, char *api) @public
 {
     raylib::init_window(cst::WTH, cst::HHT, title);
     defer raylib::close_window();

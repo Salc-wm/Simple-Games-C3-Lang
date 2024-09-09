@@ -21,7 +21,7 @@ macro void center_draw_text(Text_opt args, Color color, bool align = true) =>
 
 const Color COLOR_TEXT = rl::LIGHTGRAY;
 
-const Color[3] CL_TEXTS_AC = { COLOR_TEXT, COLOR_TEXT, rl::ORANGE };
+const Color[2] CL_TEXTS_AC = { COLOR_TEXT, COLOR_TEXT };
 const Color[3] CL_TEXTS_TITLE = { COLOR_TEXT, rl::GREEN, COLOR_TEXT };
 const Color[2] CL_TEXTS_STATE = { rl::GREEN, rl::GRAY };
 
@@ -34,10 +34,10 @@ fn Table get_grid_mouse_pos() @inline {
     );
 }
 
-fn void keyboard_actions(Simulation* game, bool *api) {
+fn void keyboard_actions(Simulation* game, char *api) {
     if (key_pressed(rl::KEY_ENTER) || key_pressed(rl::KEY_SPACE)) {|
         if (!game.run) {
-            rl::setTargetFPS(0);
+            rl::setTargetFPS(12);
             game.start();
 
             return;
@@ -55,11 +55,11 @@ fn void keyboard_actions(Simulation* game, bool *api) {
         game.createRandomState();
     } else if (rl::isKeyPressed(rl::KEY_G)) game.clearGrid();
 
-    if (key_pressed(rl::KEY_TAB)) *api = false;
+    if (key_pressed(rl::KEY_TAB)) *api = 3;
 }
 
-fn void gofl_update(Simulation game, bool *api) {
-    while (!rl::windowShouldClose() && *api)
+fn void gofl_update(Simulation game, char *api) {
+    while (!rl::windowShouldClose() && *api == 2)
     {
         game.update();
 
@@ -81,6 +81,8 @@ fn void game_ui(Simulation* game) {
     foreach (idx, ui: cst::GUI_TEXTS_TITLE) center_draw_text(ui, CL_TEXTS_TITLE[idx]);
     foreach (idx, ui: cst::GUI_TEXTS_AC) center_draw_text(ui, CL_TEXTS_AC[idx], false);
 
+    center_draw_text({"Raylib 5 -> OpenGL", 112, cst::PDG_TOP-70, 16}, rl::ORANGE, false);
+
     if (game.@isRunning()) {
         center_draw_text(cst::GUI_TEXTS_STATE[0], CL_TEXTS_STATE[0]);
     } else {
@@ -91,12 +93,12 @@ fn void game_ui(Simulation* game) {
     rl::drawText((ZString)string::new_format("%d", game.getLivingCells()), 120, cst::PDG_TOP-35, 20, rl::GREEN);
 }
 
-fn void init(String title, bool *api) @public
+fn void init(String title, char *api) @public
 {
     rl::initWindow(cst::WTH, cst::HHT, title);
     defer rl::closeWindow();
 
-    rl::setTargetFPS(120);
+    rl::setTargetFPS(0);
 
 
     //Image logo = rl::loadImage("resources/img/c3golf.png");
